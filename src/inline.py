@@ -46,9 +46,33 @@ def extract_markdown_links(text: str) -> list[tuple[str, str]]:
     return matches
 
 
-def split_nodes_images(old_nodes):
-    pass
+def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
+    new_nodes: list[TextNode] = []
+    for node in old_nodes:
+        text = node.text
+        matches = extract_markdown_images(text)
+        for match in matches:
+            parts = text.split(f"![{match[0]}]({match[1]})", maxsplit=1)
+            if parts[0] != "":
+                new_nodes.append(TextNode(parts[0], node.text_type))
+            new_nodes.append(TextNode(match[0], TextType.IMAGE, match[1]))
+            text = parts[1]
+        if text != "":
+            new_nodes.append(TextNode(text, node.text_type))
+    return new_nodes
 
 
-def split_nodes_link(text: str):
-    pass
+def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
+    new_nodes: list[TextNode] = []
+    for node in old_nodes:
+        text = node.text
+        matches = extract_markdown_links(text)
+        for match in matches:
+            parts = text.split(f"[{match[0]}]({match[1]})", maxsplit=1)
+            if parts[0] != "":
+                new_nodes.append(TextNode(parts[0], node.text_type))
+            new_nodes.append(TextNode(match[0], TextType.LINK, match[1]))
+            text = parts[1]
+        if text != "":
+            new_nodes.append(TextNode(text, node.text_type))
+    return new_nodes
