@@ -518,7 +518,9 @@ class TestSplitNodesLink(unittest.TestCase):
         self.assertListEqual(
             [
                 TextNode(
-                    "search", TextType.LINK, "https://example.com/search?q=hello&page=2"
+                    "search",
+                    TextType.LINK,
+                    "https://example.com/search?q=hello&page=2",
                 )
             ],
             new_nodes,

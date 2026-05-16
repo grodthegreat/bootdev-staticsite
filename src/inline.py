@@ -58,7 +58,7 @@ def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
             new_nodes.append(TextNode(match[0], TextType.IMAGE, match[1]))
             text = parts[1]
         if text != "":
-            new_nodes.append(TextNode(text, node.text_type))
+            new_nodes.append(TextNode(text, node.text_type, node.url))
     return new_nodes
 
 
@@ -74,5 +74,15 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
             new_nodes.append(TextNode(match[0], TextType.LINK, match[1]))
             text = parts[1]
         if text != "":
-            new_nodes.append(TextNode(text, node.text_type))
+            new_nodes.append(TextNode(text, node.text_type, node.url))
     return new_nodes
+
+
+def text_to_textnodes(text: str) -> list[TextNode]:
+    nodes = [TextNode(text, TextType.TEXT)]
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+    nodes = split_nodes_link(nodes)
+    nodes = split_nodes_image(nodes)
+    return nodes
