@@ -29,7 +29,7 @@ def block_to_block_type(markdown: str) -> BlockType:
         return BlockType.UNORDERED_LIST
     is_ordered = True
     for i in range(len(lines)):
-        is_ordered = re.match(f"^{i + 1}\. .*", lines[i]) and is_ordered
+        is_ordered = re.match(f"^{i + 1}\\. .*", lines[i]) and is_ordered
     if is_ordered:
         return BlockType.ORDERED_LIST
     return BlockType.PARAGRAPH
